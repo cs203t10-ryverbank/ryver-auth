@@ -44,6 +44,11 @@ public class User implements UserDetails {
     @NotNull(message = "Authorities cannot be null")
     private String authorities;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority(authorities));
+    }
+
     // @NotNull(message = "Name cannot be null")
     private String fullName;
 
@@ -57,19 +62,12 @@ public class User implements UserDetails {
 
     private String address;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(authorities));
-    }
+    private boolean accountNonExpired = true;
 
-    private boolean active;
+    private boolean accountNonLocked = true;
 
-    private boolean accountNonExpired;
+    private boolean credentialsNonExpired = true;
 
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
+    private boolean enabled = true;
 }
 

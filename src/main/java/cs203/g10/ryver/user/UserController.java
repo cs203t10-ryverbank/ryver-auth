@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getUsers() {
         return userRepo.findAll();
     }
@@ -28,6 +30,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public User addUser(@Valid @RequestBody User user){
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepo.save(user);
