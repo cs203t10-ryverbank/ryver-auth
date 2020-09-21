@@ -18,17 +18,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode @ToString
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
-
-    public User(String username, String password, String authorities) {
-        this.username = username;
-        this.password = password;
-        this.authorities = authorities;
-    }
 
     // TODO: Use a unique ID instead.
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
@@ -49,25 +43,29 @@ public class User implements UserDetails {
         return Arrays.asList(new SimpleGrantedAuthority(authorities));
     }
 
-    // @NotNull(message = "Name cannot be null")
+    @NotNull(message = "Name cannot be null")
     private String fullName;
 
-    // @NotNull(message = "NRIC cannot be null")
+    @NotNull(message = "NRIC cannot be null")
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
     private String nric;
 
-    // @NotNull(message = "Phone number cannot be null")
+    @NotNull(message = "Phone number cannot be null")
     @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
     private String phoneNumber;
 
     private String address;
 
+    @Builder.Default
     private boolean accountNonExpired = true;
 
+    @Builder.Default
     private boolean accountNonLocked = true;
 
+    @Builder.Default
     private boolean credentialsNonExpired = true;
 
+    @Builder.Default
     private boolean enabled = true;
 }
 

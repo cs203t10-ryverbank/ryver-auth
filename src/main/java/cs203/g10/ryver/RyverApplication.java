@@ -15,7 +15,15 @@ public class RyverApplication {
 
         UserRepository userRepo = ctx.getBean(UserRepository.class);
         BCryptPasswordEncoder encoder = ctx.getBean(BCryptPasswordEncoder.class);
-        System.out.println("[Add user]: " + userRepo.save(
-            new User("admin", encoder.encode("goodpassword"), "ROLE_ADMIN")).getUsername());
+        User defaultAdminUser = User.builder()
+                .username("admin")
+                .password(encoder.encode("goodpassword"))
+                .authorities("ROLE_ADMIN")
+                .fullName("John Smith")
+                .nric("S9876543Z")
+                .phoneNumber("+6598765432")
+                .address("12 Third Street")
+                .build();
+        System.out.println("[Add user]: " + userRepo.save(defaultAdminUser).getUsername());
 	}
 }
