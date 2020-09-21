@@ -29,6 +29,12 @@ import lombok.ToString;
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
+    public User(String username, String password, String authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
     // TODO: Use a unique ID instead.
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
 
