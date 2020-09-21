@@ -15,12 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter @Setter
@@ -38,26 +33,29 @@ public class User implements UserDetails {
     // TODO: Use a unique ID instead.
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
 
-    @NotNull(message = "Name cannot be null")
-    private String fullName;
-
-    @NotNull(message = "NRIC cannot be null")
-    @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
-    private String nric;
-
-    @NotNull(message = "Phone number cannot be null")
-    @Pattern(regexp = "\\(+65)?[689]\\d{7}")
-    private String phoneNumber;
-
-    private String address;
-
     @NotNull(message = "Username cannot be null")
     @Size(min = 5, max = 20, message = "Username should be between 5 and 20 characters")
     private String username;
 
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
+    @NotNull(message = "Authorities cannot be null")
     private String authorities;
+
+    // @NotNull(message = "Name cannot be null")
+    private String fullName;
+
+    // @NotNull(message = "NRIC cannot be null")
+    @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
+    private String nric;
+
+    // @NotNull(message = "Phone number cannot be null")
+    @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
+    private String phoneNumber;
+
+    private String address;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

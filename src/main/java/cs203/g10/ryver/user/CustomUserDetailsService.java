@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * Note that the method takes only a username.
      * The UserDetails interface has methods to get the password.
      */
-    public UserDetails loadUserByUsername(String username)  throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
     }
