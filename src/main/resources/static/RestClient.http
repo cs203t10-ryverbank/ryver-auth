@@ -5,10 +5,10 @@ Accept: application/json
 ###
 GET http://localhost:8080/users
 Accept: application/json
-Authorization: Basic johnsmith goodpassword
+Authorization: Basic manager_1 01_manager_01
 
 ###
 GET http://localhost:8080/users
 Accept: application/json
-Authorization: Basic janedoe badpassword
+Authorization: Basic analyst_1 01_analyst_01
 

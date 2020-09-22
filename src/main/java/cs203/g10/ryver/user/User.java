@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
 @Entity
-@Getter @Setter @Builder
+@Getter @Setter @Builder(toBuilder = true)
 @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode @ToString
 public class User implements UserDetails {
