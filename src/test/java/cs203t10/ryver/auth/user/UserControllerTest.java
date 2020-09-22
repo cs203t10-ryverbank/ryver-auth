@@ -1,4 +1,4 @@
-package cs203.g10.ryver.user;
+package cs203t10.ryver.auth.user;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

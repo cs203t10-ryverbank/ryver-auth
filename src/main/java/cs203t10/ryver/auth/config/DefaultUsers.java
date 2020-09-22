@@ -1,12 +1,12 @@
-package cs203.g10.ryver.config;
+package cs203t10.ryver.auth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import cs203.g10.ryver.user.User;
-import cs203.g10.ryver.user.UserService;
+import cs203t10.ryver.auth.user.User;
+import cs203t10.ryver.auth.user.UserService;
 
 @Component
 @Order(1)

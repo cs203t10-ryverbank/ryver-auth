@@ -8,11 +8,11 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>csd</groupId>
-	<artifactId>week5</artifactId>
+	<groupId>cs203t10.ryver</groupId>
+	<artifactId>auth</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Ryver Bank Auth Service</name>
+	<description>The authentication service for the Ryver Bank API</description>
 
 	<properties>
 		<java.version>11</java.version>

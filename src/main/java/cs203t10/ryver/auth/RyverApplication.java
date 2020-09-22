@@ -1,4 +1,4 @@
-package cs203.g10.ryver;
+package cs203t10.ryver.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
