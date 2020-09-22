@@ -5,18 +5,18 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
-    private UserRepository userRepo;
-    private BCryptPasswordEncoder encoder;
 
-    public UserController(UserRepository userRepo, BCryptPasswordEncoder encoder){
-        this.userRepo = userRepo;
-        this.encoder = encoder;
-    }
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @GetMapping("/users")
     @RolesAllowed("MANAGER")
