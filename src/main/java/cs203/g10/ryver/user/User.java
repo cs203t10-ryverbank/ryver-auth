@@ -18,14 +18,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
 @Entity
-@Getter @Setter @Builder
+@Getter @Setter @Builder(toBuilder = true)
 @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode @ToString
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     // TODO: Use a unique ID instead.
-    private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message = "Username cannot be null")
     @Size(min = 5, max = 20, message = "Username should be between 5 and 20 characters")
@@ -43,14 +44,11 @@ public class User implements UserDetails {
         return Arrays.asList(new SimpleGrantedAuthority(authorities));
     }
 
-    @NotNull(message = "Name cannot be null")
     private String fullName;
 
-    @NotNull(message = "NRIC cannot be null")
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
     private String nric;
 
-    @NotNull(message = "Phone number cannot be null")
     @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
     private String phoneNumber;
 

@@ -5,23 +5,19 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
-    private UserRepository userRepo;
-    private BCryptPasswordEncoder encoder;
 
-    public UserController(UserRepository userRepo, BCryptPasswordEncoder encoder){
-        this.userRepo = userRepo;
-        this.encoder = encoder;
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/users")
     @RolesAllowed("MANAGER")
     public List<User> getUsers() {
-        return userRepo.findAll();
+        return userService.findAll();
     }
 
     /**
@@ -32,8 +28,7 @@ public class UserController {
     @PostMapping("/users")
     @RolesAllowed("MANAGER")
     public User addUser(@Valid @RequestBody User user){
-        user.setPassword(encoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        return userService.saveAndHashPassword(user);
     }
 }
 
