@@ -25,7 +25,8 @@ public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     // TODO: Use a unique ID instead.
-    private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message = "Username cannot be null")
     @Size(min = 5, max = 20, message = "Username should be between 5 and 20 characters")
