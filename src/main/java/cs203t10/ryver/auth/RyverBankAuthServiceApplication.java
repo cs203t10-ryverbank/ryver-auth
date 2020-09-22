@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RyverApplication {
+public class RyverBankAuthServiceApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(RyverApplication.class, args);
+		SpringApplication.run(RyverBankAuthServiceApplication.class, args);
 	}
 }
