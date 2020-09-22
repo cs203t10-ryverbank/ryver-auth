@@ -44,14 +44,11 @@ public class User implements UserDetails {
         return Arrays.asList(new SimpleGrantedAuthority(authorities));
     }
 
-    @NotNull(message = "Name cannot be null")
     private String fullName;
 
-    @NotNull(message = "NRIC cannot be null")
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
     private String nric;
 
-    @NotNull(message = "Phone number cannot be null")
     @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
     private String phoneNumber;
 
