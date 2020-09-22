@@ -1,50 +1,29 @@
 package cs203.g10.ryver.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTest {
-    private static String host = "http://localhost";
-
-    @LocalServerPort
-    private int port;
-
-    private String getHostPort() {
-        return host + ":" + port + "/";
-    }
-
     @Autowired
-    private UserController controller;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
     @Test
-    public void contextLoads() {
-        assertThat(controller).isNotNull();
-    }
-
-    @Test
-    public void getUsersUnauthorized() {
-        ResponseEntity<String> response = restTemplate.getForEntity(getHostPort() + "users", String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    public void getUsersUnauthorized() throws Exception {
+        mockMvc.perform(get("/users")).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(username = "johnsmith", roles = { "MANAGER" })
-    public void getUsers() {
-        ResponseEntity<String> response = restTemplate.getForEntity(getHostPort() + "users", String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        System.out.println(response.getBody());
+    public void getUsers() throws Exception {
+        mockMvc.perform(get("/users")).andExpect(status().isOk());
     }
 }
