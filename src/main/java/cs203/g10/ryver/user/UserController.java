@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed("MANAGER")
     public List<User> getUsers() {
         return userRepo.findAll();
     }
@@ -30,7 +30,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/users")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed("MANAGER")
     public User addUser(@Valid @RequestBody User user){
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepo.save(user);
