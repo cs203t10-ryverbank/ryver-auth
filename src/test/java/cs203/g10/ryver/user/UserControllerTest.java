@@ -22,7 +22,13 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "johnsmith", roles = { "MANAGER" })
+    @WithMockUser(roles = { "USER" })
+    public void getUsersForbidden() throws Exception {
+        mockMvc.perform(get("/users")).andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = { "MANAGER" })
     public void getUsers() throws Exception {
         mockMvc.perform(get("/users")).andExpect(status().isOk());
     }
