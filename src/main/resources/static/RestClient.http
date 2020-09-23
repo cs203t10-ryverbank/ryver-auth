@@ -1,14 +1,14 @@
 ###
-GET http://localhost:8080/users
+GET http://localhost:8081/users
 Accept: application/json
 
 ###
-GET http://localhost:8080/users
+GET http://localhost:8081/users
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ###
-GET http://localhost:8080/users
+GET http://localhost:8081/users
 Accept: application/json
 Authorization: Basic analyst_1 01_analyst_01
 
