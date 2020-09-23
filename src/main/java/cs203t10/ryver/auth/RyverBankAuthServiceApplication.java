@@ -7,7 +7,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 public class RyverBankAuthServiceApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(RyverBankAuthServiceApplication.class, args);
 	}
+
 }
+
