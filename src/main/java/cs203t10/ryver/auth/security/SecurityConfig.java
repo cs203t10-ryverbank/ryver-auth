@@ -8,8 +8,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService)
-            .passwordEncoder(getEncoder());
+            .passwordEncoder(encoder());
     }
 
     /**
@@ -41,9 +45,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .httpBasic()
         .and()
+            .cors()
+        .and()
             .formLogin().disable()
             .csrf().disable()
-            .headers().disable();
+            .headers().disable()
+            .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+            .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+            // Disable session creation on Spring Security
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        ;
     }
 
     /**
@@ -51,9 +62,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * Any calls to encoder() will then be intercepted to return the bean instance.
      */
     @Bean
-    public BCryptPasswordEncoder getEncoder() {
-        // auto-generate a random salt internally
+    public BCryptPasswordEncoder encoder() {
+        // Auto-generate a random salt internally.
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Allow all sources to access this service.
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 
 }

@@ -29,8 +29,11 @@ import static cs203t10.ryver.auth.security.SecurityConstants.TOKEN_PREFIX;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    @Autowired
     private AuthenticationManager authManager;
+
+    public JWTAuthenticationFilter(AuthenticationManager authManager) {
+        this.authManager = authManager;
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
