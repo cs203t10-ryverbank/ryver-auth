@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService)
-            .passwordEncoder(encoder());
+            .passwordEncoder(getEncoder());
     }
 
     /**
@@ -51,9 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * Any calls to encoder() will then be intercepted to return the bean instance.
      */
     @Bean
-    public BCryptPasswordEncoder encoder() {
+    public BCryptPasswordEncoder getEncoder() {
         // auto-generate a random salt internally
         return new BCryptPasswordEncoder();
     }
+
 }
 
