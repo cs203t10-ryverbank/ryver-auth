@@ -15,7 +15,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    @RolesAllowed("MANAGER")
+    // @RolesAllowed("MANAGER")
     public List<User> getUsers() {
         return userService.findAll();
     }
@@ -26,9 +26,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/users")
-    @RolesAllowed("MANAGER")
+    // @RolesAllowed("MANAGER")
     public User addUser(@Valid @RequestBody User user){
         return userService.saveAndHashPassword(user);
     }
+
 }
 
