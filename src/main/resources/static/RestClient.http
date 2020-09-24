@@ -1,4 +1,7 @@
 ###
+GET http://localhost:8081/
+
+###
 GET http://localhost:8081/users
 Accept: application/json
 
