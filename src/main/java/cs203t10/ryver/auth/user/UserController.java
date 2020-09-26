@@ -10,13 +10,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import cs203t10.ryver.auth.security.SecurityUtils;
 import cs203t10.ryver.auth.user.model.User;
 import cs203t10.ryver.auth.user.model.UserInfo;
-import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByManager;
@@ -43,14 +41,10 @@ public class UserController {
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Get a user's data")
     public UserInfo getCustomer(@PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            return null;
-        }
         User user = userService.findById(id);
         // Users without a manager role can only view a subset of customer data.
         UserInfo userInfo;
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+        if (SecurityUtils.isManagerAuthenticated()) {
             userInfo = new UserInfoViewableByManager();
         } else {
             userInfo = new UserInfoViewableByCustomer();
@@ -76,11 +70,10 @@ public class UserController {
             notes = "Only fields defined in the request body will be updated.")
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // Users without a manager role can only view a subset of customer data.
-        User updatedUser = userService.updateUser(id, newUserInfo, auth);
+        User updatedUser = userService.updateUser(id, newUserInfo);
         UserInfo infoToView;
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+        if (SecurityUtils.isManagerAuthenticated()) {
             infoToView = new UserInfoViewableByManager();
         } else {
             infoToView = new UserInfoViewableByCustomer();

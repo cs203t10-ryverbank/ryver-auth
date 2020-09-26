@@ -9,10 +9,10 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import cs203t10.ryver.auth.security.SecurityUtils;
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 import cs203t10.ryver.auth.user.model.User;
 import cs203t10.ryver.auth.user.model.UserInfo;
@@ -62,9 +62,9 @@ public class UserService {
         }
     }
 
-    public User updateUser(long id, UserInfoUpdatableByManager newUserInfo, Authentication auth) {
+    public User updateUser(long id, UserInfoUpdatableByManager newUserInfo) {
         UserInfo infoToUpdate;
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+        if (SecurityUtils.isManagerAuthenticated()) {
             infoToUpdate = new UserInfoUpdatableByManager();
         } else {
             infoToUpdate = new UserInfoUpdatableByCustomer();
