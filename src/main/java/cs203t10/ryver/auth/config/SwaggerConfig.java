@@ -1,14 +1,18 @@
 package cs203t10.ryver.auth.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.BasicAuth;
 import springfox.documentation.service.SecurityReference;
@@ -20,10 +24,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
 
     @Bean
-    public Docket api() {
+    public Docket springfoxDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
             .groupName("Ryver Auth")
             .select()
@@ -31,8 +36,8 @@ public class SwaggerConfig {
             .paths(PathSelectors.any())
             .build()
             .apiInfo(apiInfo())
-            .securityContexts(Arrays.asList(securityContext()))
-            .securitySchemes(Arrays.asList(basicAuthScheme()));
+            .securityContexts(securityContexts())
+            .securitySchemes(securitySchemes());
     }
 
     private ApiInfo apiInfo() {
@@ -43,19 +48,33 @@ public class SwaggerConfig {
             .build();
     }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-            .securityReferences(Arrays.asList(basicAuthReference()))
-            .forPaths(PathSelectors.any())
-            .build();
+    private List<SecurityContext> securityContexts() {
+        return Arrays.asList(
+                SecurityContext.builder()
+                    .securityReferences(securityReferences())
+                    .forPaths(PathSelectors.any())
+                    .build());
     }
 
-    private SecurityReference basicAuthReference() {
+    private List<SecurityReference> securityReferences() {
+        return Arrays.asList(basicAuth(), jwtAuth());
+    }
+
+    private SecurityReference basicAuth() {
         return new SecurityReference("basicAuth", new AuthorizationScope[0]);
     }
 
-    private SecurityScheme basicAuthScheme() {
-        return new BasicAuth("basicAuth");
+    private SecurityReference jwtAuth() {
+        AuthorizationScope[] authScopes = new AuthorizationScope[1];
+        authScopes[0] = new AuthorizationScope("global", "accessEverything");
+        return new SecurityReference("JWT", authScopes);
+    }
+
+    private List<SecurityScheme> securitySchemes() {
+        return Arrays.asList(
+            new BasicAuth("basicAuth"),
+            new ApiKey("JWT", "Authorization", "header")
+        );
     }
 
 }
