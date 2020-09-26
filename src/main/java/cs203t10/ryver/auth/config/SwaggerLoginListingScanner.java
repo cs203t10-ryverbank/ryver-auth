@@ -14,7 +14,9 @@ import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -37,13 +39,13 @@ public class SwaggerLoginListingScanner implements ApiListingScannerPlugin {
                 Arrays.asList(
                         new ApiDescription(null, "/login", "login", Collections.singletonList(
                                 new OperationBuilder(operationNames)
-                                        .summary("Generate a JWT")
-                                        .tags(Set.of("jwt-authentication-filter"))
-                                        .authorizations(new ArrayList<>())
+                                        .method(HttpMethod.POST)
                                         .position(1)
                                         .codegenMethodNameStem("loginPost")
-                                        .method(HttpMethod.POST)
+                                        .summary("Generate a JWT")
                                         .notes("Pass a username and password via Basic authentication to receive a JWT token.")
+                                        .tags(Set.of("jwt-authentication-filter"))
+                                        .authorizations(Arrays.asList(new SecurityReference("basicAuth", new AuthorizationScope[0])))
                                         .responseMessages(responseMessages())
                                         .responseModel(new ModelRef("UserToken"))
                                         .build()
