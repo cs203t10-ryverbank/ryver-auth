@@ -1,6 +1,5 @@
 package cs203t10.ryver.auth.user.model;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -22,9 +22,6 @@ public class DefaultUsers implements CommandLineRunner {
         addDefaultUser(User.builder().username("manager_1").password("01_manager_01").authString("ROLE_MANAGER").build());
         addDefaultUser(User.builder().username("analyst_1").password("01_analyst_01").authString("ROLE_ANALYST").build());
         addDefaultUser(User.builder().username("analyst_2").password("02_analyst_02").authString("ROLE_ANALYST").build());
-        // Added during tests.
-        // addDefaultUser(User.builder().username("good_user_1").password("01_user_01").authString("ROLE_USER").build());
-        // addDefaultUser(User.builder().username("good_user_2").password("02_user_02").authString("ROLE_USER").build());
     }
 
     public void addDefaultUser(User user) {
