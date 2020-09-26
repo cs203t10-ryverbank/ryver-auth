@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
+import cs203t10.ryver.auth.user.model.User;
+import cs203t10.ryver.auth.user.model.UserUpdatableInfo;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
