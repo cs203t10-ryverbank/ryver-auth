@@ -3,8 +3,11 @@ package cs203t10.ryver.auth.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
 @Service
 public class UserService {
@@ -34,6 +37,10 @@ public class UserService {
      * @return The user with a hashed password.
      */
     public User saveAndHashPassword(User user) {
-        return userRepo.save(user.toBuilder().password(encoder.encode(user.getPassword())).build());
+        try {
+            return userRepo.save(user.toBuilder().password(encoder.encode(user.getPassword())).build());
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyExistsException(user.getUsername());
+        }
     }
 }

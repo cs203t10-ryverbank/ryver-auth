@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import cs203t10.ryver.auth.user.User;
 import cs203t10.ryver.auth.user.UserService;
 
+import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
+
 @Component
 @Order(1)
 public class DefaultUsers implements CommandLineRunner {
@@ -26,7 +28,11 @@ public class DefaultUsers implements CommandLineRunner {
     }
 
     public void addDefaultUser(User user) {
-        System.out.println("[Add user]: " + userService.saveAndHashPassword(user).getUsername());
+        try {
+            System.out.println("[Add user]: " + userService.saveAndHashPassword(user).getUsername());
+        } catch (UserAlreadyExistsException e) {
+            System.out.println("[Already exists]: " + user.getUsername());
+        }
     }
 }
 

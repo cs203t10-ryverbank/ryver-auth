@@ -6,9 +6,14 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
+
 @RestController
+@ControllerAdvice
 public class UserController {
 
     @Autowired
