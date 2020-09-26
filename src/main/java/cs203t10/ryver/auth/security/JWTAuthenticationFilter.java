@@ -75,7 +75,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = JWT.create()
             .withSubject(user.getUsername())
-            .withClaim(UID_KEY, user.getId())
+            .withClaim(UID_KEY, user.getId().toString())
             .withClaim(AUTHORITIES_KEY, authorities)
             .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
             .sign(HMAC512(SECRET.getBytes()));
