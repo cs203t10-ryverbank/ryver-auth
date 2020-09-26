@@ -57,15 +57,19 @@ public class User extends UserUpdatableInfo implements UserDetails {
     private String address;
 
     @Builder.Default
+    @Setter(AccessLevel.NONE)
     private boolean accountNonExpired = true;
 
     @Builder.Default
+    @Setter(AccessLevel.NONE)
     private boolean accountNonLocked = true;
 
     @Builder.Default
+    @Setter(AccessLevel.NONE)
     private boolean credentialsNonExpired = true;
 
     @Builder.Default
+    @Setter(AccessLevel.NONE)
     private boolean enabled = true;
 }
 

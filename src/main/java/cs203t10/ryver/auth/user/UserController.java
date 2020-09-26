@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 
 @RestController
-@ControllerAdvice
 public class UserController {
 
     @Autowired
