@@ -37,13 +37,13 @@ public class SwaggerLoginListingScanner implements ApiListingScannerPlugin {
                 Arrays.asList(
                         new ApiDescription(null, "/login", "login", Collections.singletonList(
                                 new OperationBuilder(operationNames)
-                                        .summary("login")
+                                        .summary("Generate a JWT")
                                         .tags(Set.of("jwt-authentication-filter"))
                                         .authorizations(new ArrayList<>())
                                         .position(1)
                                         .codegenMethodNameStem("loginPost")
                                         .method(HttpMethod.POST)
-                                        .notes("This is a login method")
+                                        .notes("Pass a username and password via Basic authentication to receive a JWT token.")
                                         .responseMessages(responseMessages())
                                         .responseModel(new ModelRef("UserToken"))
                                         .build()

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class UserController {
@@ -18,6 +19,7 @@ public class UserController {
 
     @GetMapping("/customers")
     @RolesAllowed("MANAGER")
+    @ApiOperation(value = "Get all user data")
     public List<User> getCustomers() {
         return userService.findAll();
     }
@@ -29,12 +31,15 @@ public class UserController {
      */
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
+    @ApiOperation(value = "Add a customer")
     public User addCustomer(@Valid @RequestBody User user){
         return userService.saveCustomer(user);
     }
 
     @PutMapping("/customers/{id}")
     @RolesAllowed("MANAGER")
+    @ApiOperation(value = "Update a customer's details",
+            notes = "Only fields defined in the request body will be updated.")
     public User updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserUpdatableInfo userInfo) {
         System.out.println(userInfo);
