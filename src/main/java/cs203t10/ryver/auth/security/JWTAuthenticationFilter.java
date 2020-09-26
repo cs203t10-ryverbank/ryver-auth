@@ -28,6 +28,7 @@ import static cs203t10.ryver.auth.security.SecurityConstants.EXPIRATION_TIME;
 import static cs203t10.ryver.auth.security.SecurityConstants.HEADER_STRING;
 import static cs203t10.ryver.auth.security.SecurityConstants.SECRET;
 import static cs203t10.ryver.auth.security.SecurityConstants.TOKEN_PREFIX;
+import static cs203t10.ryver.auth.security.SecurityConstants.UID_KEY;
 
 /**
  * Handle all authentication attempts on the `/login` route.
@@ -64,15 +65,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
             HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
+
+        User user = (User) authResult.getPrincipal();
+
         // Serialize all granted authorities into a comma-separated string.
         final String authorities = authResult.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
         String token = JWT.create()
-            .withSubject(((User) authResult.getPrincipal()).getUsername())
-            .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .withSubject(user.getUsername())
+            .withClaim(UID_KEY, user.getId())
             .withClaim(AUTHORITIES_KEY, authorities)
+            .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
             .sign(HMAC512(SECRET.getBytes()));
 
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);

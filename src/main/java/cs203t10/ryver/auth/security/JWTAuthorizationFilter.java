@@ -26,6 +26,7 @@ import static cs203t10.ryver.auth.security.SecurityConstants.AUTHORITIES_KEY;
 import static cs203t10.ryver.auth.security.SecurityConstants.HEADER_STRING;
 import static cs203t10.ryver.auth.security.SecurityConstants.SECRET;
 import static cs203t10.ryver.auth.security.SecurityConstants.TOKEN_PREFIX;
+import static cs203t10.ryver.auth.security.SecurityConstants.UID_KEY;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -67,8 +68,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 .verify(token.replace(TOKEN_PREFIX, ""));
 
         // Extract the username (subject) from the JWT.
-        final String user = jwt.getSubject();
-        if (user == null) {
+        final String uid = jwt.getClaim(UID_KEY).asString();
+        if (uid == null) {
             return null;
         }
 
@@ -77,7 +78,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 Arrays.stream(jwt.getClaim(AUTHORITIES_KEY).asString().split(","))
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
-        return new UsernamePasswordAuthenticationToken(user, null, authorities);
+
+        // Set the UID as the principal of the auth token.
+        return new UsernamePasswordAuthenticationToken(uid, null, authorities);
     }
 
 }
