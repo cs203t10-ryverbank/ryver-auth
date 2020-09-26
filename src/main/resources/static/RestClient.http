@@ -9,7 +9,7 @@ Authorization: Basic manager_1 01_manager_01
 ###
 POST http://localhost:8081/login
 Accept: application/json
-Authorization: Basic analyst_1 01_analyst_01
+Authorization: Basic bryan password
 
 ###
 GET http://localhost:8081/customers
@@ -19,46 +19,41 @@ Accept: application/json
 GET http://localhost:8081/customers
 Accept: application/json
 # Token generated with manager account.
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTU0OTJ9.y9HE45uMdp8L1bbAN-RagD_kZ2-AveFaxKJk1RUIeb3aXZdcM_xY5e1bQMBcC12vw7NV_NkpkPhjgIxqA8uKXw
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 ### Get users as analyst
 GET http://localhost:8081/customers
 Accept: application/json
 # Token generated with analyst account.
-Authorization: Bearer <replace-with-generated-token>
+Authorization: Bearer ...
 
 ### Create new user
 POST http://localhost:8081/customers
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTU0OTJ9.y9HE45uMdp8L1bbAN-RagD_kZ2-AveFaxKJk1RUIeb3aXZdcM_xY5e1bQMBcC12vw7NV_NkpkPhjgIxqA8uKXw
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"gooduser123d45",
+    "username":"bryan",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
 }
 
 ### Update a user
-PUT http://localhost:8081/customers/85
+PUT http://localhost:8081/customers/16
 Content-Type: application/json
-Authorization: Bearer <replace-with-generated-token>
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 {
-    "nric":"S8291266Z"
+    "nric":"S8291265Z"
 }
 
-### Disable and re-enable a user
-PUT http://localhost:8081/customers/85/disable
+### Get user info
+GET http://localhost:8081/customers/16
 Content-Type: application/json
-Authorization: Bearer <replace-with-generated-token>
-
-### Get user info as a customer
-GET http://localhost:8081/customers/4
-Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6NCwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTYwMTk5NjM5Nn0.UCJaFZG5TbdxuWvkdzZc_S6wuigdrGlEyu3tqyhJAChU3ckIFwaUX_yuhKG_OvwugP_Z7FaaVZ9Pe4OHk8-Wrg
-
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTYsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDIwMDAxMDJ9.qs3Zmm3yAosjF0FrEC94K0zXuK7zHMObGTk3VQOunAJHUNWly8ldcuIfLDC7sMcvSMS4b3xVvivxA_qQkzHEPw
+# Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw

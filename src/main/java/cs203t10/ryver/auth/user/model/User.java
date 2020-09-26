@@ -2,6 +2,8 @@ package cs203t10.ryver.auth.user.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +26,7 @@ import lombok.*;
 @Getter @Setter @Builder(toBuilder = true)
 @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false) @ToString
-public class User extends UserUpdatableInfo implements UserDetails {
+public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     // TODO: Use a unique ID instead.
@@ -40,12 +42,16 @@ public class User extends UserUpdatableInfo implements UserDetails {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
+    @JsonProperty("authorities")
     @NotNull(message = "Authorities cannot be null")
-    private String authorities;
+    private String authString;
 
+    @JsonProperty("authorities_array")
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(authorities));
+        return Stream.of(authString.split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @JsonProperty("full_name")

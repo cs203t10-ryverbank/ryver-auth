@@ -9,12 +9,15 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 import cs203t10.ryver.auth.user.model.User;
-import cs203t10.ryver.auth.user.model.UserUpdatableInfo;
+import cs203t10.ryver.auth.user.model.UserInfo;
+import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
+import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
@@ -42,7 +45,8 @@ public class UserService {
      */
     public User saveCustomer(User user) {
         return saveAndHashPassword(user.toBuilder()
-                .authorities("ROLE_USER").build());
+                .authString("ROLE_USER")
+                .build());
     }
 
     /**
@@ -58,10 +62,17 @@ public class UserService {
         }
     }
 
-    public User updateUser(long id, UserUpdatableInfo updatedUser) {
+    public User updateUser(long id, UserInfoUpdatableByManager newUserInfo, Authentication auth) {
+        UserInfo infoToUpdate;
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+            infoToUpdate = new UserInfoUpdatableByManager();
+        } else {
+            infoToUpdate = new UserInfoUpdatableByCustomer();
+        }
+        BeanUtils.copyProperties(newUserInfo, infoToUpdate);
         return userRepo.findById(id).map(user -> {
             // Copy over non-null values only.
-            BeanUtils.copyProperties(updatedUser, user, getNullPropertyNames(updatedUser));
+            BeanUtils.copyProperties(infoToUpdate, user, getNullPropertyNames(infoToUpdate));
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
