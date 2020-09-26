@@ -35,3 +35,34 @@ The expiry of the token signifies till when the token should be considered valid
 
 Beyond this time, the token should be invalidated.
 
+## Parsing a JWT
+
+JWTs are parsed using the `com.auth0.java-jwt` package.
+
+```xml
+<dependency>
+  <groupId>com.auth0</groupId>
+  <artifactId>java-jwt</artifactId>
+  <version>3.10.3</version>
+</dependency>
+```
+
+To view example code for how the token is parsed, view `cs203t10.ryver.auth.security.JWTAuthorizationFilter`.
+
+The token is first extracted from the Authorization header, and decoded with `JWT.build().verify()`.
+
+```java
+DecodedJWT jwt = JWT
+        .require(HMAC512(SECRET.getBytes()))
+        .build()
+        .verify(token.replace(TOKEN_PREFIX, ""));
+```
+
+> `TOKEN_PREFIX` is simply the `"Bearer "` portion of the Authorization header.
+
+Once decoded, the claims of the JWT can be examined.
+
+```java
+final Long uid = jwt.getClaim(UID_KEY).asLong();
+```
+
