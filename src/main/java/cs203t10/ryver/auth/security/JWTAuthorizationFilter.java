@@ -23,9 +23,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static cs203t10.ryver.auth.security.SecurityConstants.AUTHORITIES_KEY;
-import static cs203t10.ryver.auth.security.SecurityConstants.HEADER_STRING;
+import static cs203t10.ryver.auth.security.SecurityConstants.AUTH_HEADER_KEY;
+import static cs203t10.ryver.auth.security.SecurityConstants.BEARER_PREFIX;
 import static cs203t10.ryver.auth.security.SecurityConstants.SECRET;
-import static cs203t10.ryver.auth.security.SecurityConstants.TOKEN_PREFIX;
 import static cs203t10.ryver.auth.security.SecurityConstants.UID_KEY;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -38,10 +38,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String header = request.getHeader(HEADER_STRING);
+        String header = request.getHeader(AUTH_HEADER_KEY);
 
         // If no JWT in the Authorization header, then skip this filter.
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+        if (header == null || !header.startsWith(BEARER_PREFIX)) {
             chain.doFilter(request, response);
             return;
         }
@@ -59,13 +59,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
      * @return An authentication token if the JWT is valid, or null if it is not.
      */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
+        String token = request.getHeader(AUTH_HEADER_KEY);
         if (token == null) {
             return null;
         }
         DecodedJWT jwt = JWT.require(HMAC512(SECRET.getBytes()))
                 .build()
-                .verify(token.replace(TOKEN_PREFIX, ""));
+                .verify(token.replace(BEARER_PREFIX, ""));
 
         // Extract the username (subject) from the JWT.
         final Long uid = jwt.getClaim(UID_KEY).asLong();

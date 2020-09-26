@@ -4,20 +4,12 @@ GET http://localhost:8081/
 ###
 POST http://localhost:8081/login
 Accept: application/json
-
-{
-    "username": "manager_1",
-    "password": "01_manager_01"
-}
+Authorization: Basic manager_1 01_manager_01
 
 ###
 POST http://localhost:8081/login
 Accept: application/json
-
-{
-    "username": "analyst_1",
-    "password": "01_analyst_01"
-}
+Authorization: Basic analyst_1 01_analyst_01
 
 ###
 GET http://localhost:8081/users
