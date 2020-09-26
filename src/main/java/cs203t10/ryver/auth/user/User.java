@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +23,7 @@ import lombok.*;
 @Entity
 @Getter @Setter @Builder(toBuilder = true)
 @AllArgsConstructor @NoArgsConstructor
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode(callSuper = false) @ToString
 public class User extends UserUpdatableInfo implements UserDetails {
     private static final long serialVersionUID = 1L;
 
@@ -46,11 +48,13 @@ public class User extends UserUpdatableInfo implements UserDetails {
         return Arrays.asList(new SimpleGrantedAuthority(authorities));
     }
 
+    @JsonProperty("full_name")
     private String fullName;
 
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
     private String nric;
 
+    @JsonProperty("phone")
     @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
     private String phoneNumber;
 
