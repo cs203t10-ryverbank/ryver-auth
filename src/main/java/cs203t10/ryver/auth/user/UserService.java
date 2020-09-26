@@ -20,6 +20,15 @@ public class UserService {
     }
 
     /**
+     * Save a user as a customer.
+     * @return The user as a customer.
+     */
+    public User saveCustomer(User user) {
+        return saveAndHashPassword(user.toBuilder()
+                .authorities("ROLE_USER").build());
+    }
+
+    /**
      * Save the user to the repository with a hashed password.
      * The original user object is not mutated.
      * @return The user with a hashed password.

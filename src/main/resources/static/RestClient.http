@@ -12,18 +12,34 @@ Accept: application/json
 Authorization: Basic analyst_1 01_analyst_01
 
 ###
-GET http://localhost:8081/users
+GET http://localhost:8081/customers
 Accept: application/json
 
-###
-GET http://localhost:8081/users
+### Get users as manager
+GET http://localhost:8081/customers
 Accept: application/json
 # Token generated with manager account.
-Authorization: Bearer ...
+Authorization: Bearer <replace-with-generated-token>
 
-###
-GET http://localhost:8081/users
+### Get users as analyst
+GET http://localhost:8081/customers
 Accept: application/json
 # Token generated with analyst account.
-Authorization: Bearer ...
+Authorization: Bearer <replace-with-generated-token>
+
+### Create new user
+POST http://localhost:8081/customers
+Content-Type: application/json
+Authorization: Bearer <replace-with-generated-token>
+
+{
+    "full_name":"Mark Tan",
+    "nric":"S8291266I",
+    "phone":"91251234",
+    "address":"27 Jalan Alamak S680234",
+    "username":"gooduser",
+    "password":"password",
+    "authorities":"ROLE_USER",
+    "active": true
+}
 

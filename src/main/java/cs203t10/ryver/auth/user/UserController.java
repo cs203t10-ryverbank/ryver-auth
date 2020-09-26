@@ -14,9 +14,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/customers")
     @RolesAllowed("MANAGER")
-    public List<User> getUsers() {
+    public List<User> getCustomers() {
         return userService.findAll();
     }
 
@@ -25,10 +25,10 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping("/users")
+    @PostMapping("/customers")
     @RolesAllowed("MANAGER")
-    public User addUser(@Valid @RequestBody User user){
-        return userService.saveAndHashPassword(user);
+    public User addCustomer(@Valid @RequestBody User user){
+        return userService.saveCustomer(user);
     }
 
 }
