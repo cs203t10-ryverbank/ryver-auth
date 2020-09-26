@@ -22,7 +22,7 @@ import lombok.*;
 @Getter @Setter @Builder(toBuilder = true)
 @AllArgsConstructor @NoArgsConstructor
 @EqualsAndHashCode @ToString
-public class User implements UserDetails {
+public class User extends UserUpdatableInfo implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     // TODO: Use a unique ID instead.

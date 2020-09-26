@@ -1,7 +1,12 @@
 package cs203t10.ryver.auth.user;
 
+import java.beans.FeatureDescriptor;
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,10 +49,21 @@ public class UserService {
         }
     }
 
-    public User updateUser(long id, User updatedUser) {
-        return userRepo.findById(id).map(book -> {
-            return userRepo.save(updatedUser);
+    public User updateUser(long id, UserUpdatableInfo updatedUser) {
+        return userRepo.findById(id).map((User user) -> {
+            // Copy over non-null values only.
+            BeanUtils.copyProperties(updatedUser, user, getNullPropertyNames(updatedUser));
+            return userRepo.save(user);
         }).orElse(null);
+    }
+
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
+        return Stream.of(wrappedSource.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .filter(propertyName ->
+                        wrappedSource.getPropertyValue(propertyName) == null)
+                .toArray(String[]::new);
     }
 
 }

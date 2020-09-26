@@ -6,11 +6,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 
 @RestController
@@ -40,8 +37,9 @@ public class UserController {
     @PutMapping("/customers/{id}")
     @RolesAllowed("MANAGER")
     public User updateCustomer(@PathVariable Long id,
-            @Valid @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+            @Valid @RequestBody UserUpdatableInfo userInfo) {
+        System.out.println(userInfo);
+        User updatedUser = userService.updateUser(id, userInfo);
         if (updatedUser == null) {
             throw new UserNotFoundException(id);
         }
