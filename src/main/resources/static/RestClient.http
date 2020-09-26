@@ -19,7 +19,7 @@ Accept: application/json
 GET http://localhost:8081/customers
 Accept: application/json
 # Token generated with manager account.
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5NzgzMDN9.46wCVAefXYqcTiB3nrIJVO4AykkH_UQY0mi10HNLZa_tzhLprrUtZ5bCjEBTJcKhaQ1-Sf39reSfverFct-qGg
+Authorization: Bearer <replace-with-generated-token>
 
 ### Get users as analyst
 GET http://localhost:8081/customers
@@ -30,14 +30,14 @@ Authorization: Bearer <replace-with-generated-token>
 ### Create new user
 POST http://localhost:8081/customers
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5NzgzMDN9.46wCVAefXYqcTiB3nrIJVO4AykkH_UQY0mi10HNLZa_tzhLprrUtZ5bCjEBTJcKhaQ1-Sf39reSfverFct-qGg
+Authorization: Bearer <replace-with-generated-token>
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"gooduser_21",
+    "username":"gooduser",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
@@ -46,10 +46,14 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
 ### Update a user
 PUT http://localhost:8081/customers/85
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5NzgzMDN9.46wCVAefXYqcTiB3nrIJVO4AykkH_UQY0mi10HNLZa_tzhLprrUtZ5bCjEBTJcKhaQ1-Sf39reSfverFct-qGg
+Authorization: Bearer <replace-with-generated-token>
 
 {
     "nric":"S8291266Z"
 }
 
+### Disable and re-enable a user
+PUT http://localhost:8081/customers/85/disable
+Content-Type: application/json
+Authorization: Bearer <replace-with-generated-token>
 

@@ -42,12 +42,21 @@ public class UserController {
             notes = "Only fields defined in the request body will be updated.")
     public User updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserUpdatableInfo userInfo) {
-        System.out.println(userInfo);
-        User updatedUser = userService.updateUser(id, userInfo);
-        if (updatedUser == null) {
-            throw new UserNotFoundException(id);
-        }
-        return updatedUser;
+        return userService.updateUser(id, userInfo);
+    }
+
+    @PutMapping("/customers/{id}/disable")
+    @RolesAllowed("MANAGER")
+    @ApiOperation(value = "Disable a customer's account")
+    public User disableCustomer(@PathVariable Long id) {
+        return userService.setActiveOfUser(id, false);
+    }
+
+    @PutMapping("/customers/{id}/enable")
+    @RolesAllowed("MANAGER")
+    @ApiOperation(value = "Enable a customer's account")
+    public User enableCustomer(@PathVariable Long id) {
+        return userService.setActiveOfUser(id, true);
     }
 
 }

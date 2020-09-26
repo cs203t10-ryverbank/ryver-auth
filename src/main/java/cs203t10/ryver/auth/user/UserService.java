@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
+
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
 @Service
@@ -50,11 +52,11 @@ public class UserService {
     }
 
     public User updateUser(long id, UserUpdatableInfo updatedUser) {
-        return userRepo.findById(id).map((User user) -> {
+        return userRepo.findById(id).map(user -> {
             // Copy over non-null values only.
             BeanUtils.copyProperties(updatedUser, user, getNullPropertyNames(updatedUser));
             return userRepo.save(user);
-        }).orElse(null);
+        }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     private String[] getNullPropertyNames(Object source) {
@@ -64,6 +66,13 @@ public class UserService {
                 .filter(propertyName ->
                         wrappedSource.getPropertyValue(propertyName) == null)
                 .toArray(String[]::new);
+    }
+
+    public User setActiveOfUser(long id, boolean active) {
+        return userRepo.findById(id).map(user -> {
+            user.setEnabled(active);
+            return userRepo.save(user);
+        }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
 }

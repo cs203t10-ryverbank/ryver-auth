@@ -72,8 +72,8 @@ public class User extends UserUpdatableInfo implements UserDetails {
     @Setter(AccessLevel.NONE)
     private boolean credentialsNonExpired = true;
 
+    @JsonProperty("active")
     @Builder.Default
-    @Setter(AccessLevel.NONE)
     private boolean enabled = true;
 }
 
