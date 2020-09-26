@@ -6,6 +6,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
@@ -32,6 +33,7 @@ public class UserController {
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
     @ApiOperation(value = "Add a customer")
+    @ResponseStatus(HttpStatus.CREATED)
     public User addCustomer(@Valid @RequestBody User user){
         return userService.saveCustomer(user);
     }
