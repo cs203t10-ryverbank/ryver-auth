@@ -7,9 +7,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -25,11 +25,13 @@ public class UserController {
         return userService.findAll();
     }
 
-    /**
-     * Using BCrypt encoder to encrypt the password for storage
-     * @param user
-     * @return
-     */
+    @GetMapping("/customers/{id}")
+    @PreAuthorize("principal == #id or hasRole('MANAGER')")
+    @ApiOperation(value = "Get a user's data")
+    public User getCustomer(@PathVariable Long id) {
+        return userService.findById(id);
+    }
+
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
     @ApiOperation(value = "Add a customer")

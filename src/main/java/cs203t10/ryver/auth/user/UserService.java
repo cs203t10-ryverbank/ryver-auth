@@ -25,6 +25,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
+    public User findById(long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
     public List<User> findAll() {
         return userRepo.findAll();
     }
