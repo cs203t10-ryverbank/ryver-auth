@@ -43,4 +43,12 @@ public class UserService {
             throw new UserAlreadyExistsException(user.getUsername());
         }
     }
+
+    public User updateUser(long id, User updatedUser) {
+        return userRepo.findById(id).map(book -> {
+            return userRepo.save(updatedUser);
+        }).orElse(null);
+    }
+
 }
+

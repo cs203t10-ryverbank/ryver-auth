@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
+import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 
 @RestController
 @ControllerAdvice
@@ -34,6 +35,17 @@ public class UserController {
     @RolesAllowed("MANAGER")
     public User addCustomer(@Valid @RequestBody User user){
         return userService.saveCustomer(user);
+    }
+
+    @PutMapping("/customers/{id}")
+    @RolesAllowed("MANAGER")
+    public User updateCustomer(@PathVariable Long id,
+            @Valid @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);
+        if (updatedUser == null) {
+            throw new UserNotFoundException(id);
+        }
+        return updatedUser;
     }
 
 }
