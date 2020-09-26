@@ -68,7 +68,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 .verify(token.replace(TOKEN_PREFIX, ""));
 
         // Extract the username (subject) from the JWT.
-        final String uid = jwt.getClaim(UID_KEY).asString();
+        final Long uid = jwt.getClaim(UID_KEY).asLong();
         if (uid == null) {
             return null;
         }
