@@ -72,7 +72,7 @@ public class UserController {
 
     @PutMapping("/customers/{id}")
     @RolesAllowed("MANAGER")
-    @ApiOperation(value = "Update a customer's details",
+    @ApiOperation(value = "Update a user's details",
             notes = "Only fields defined in the request body will be updated.")
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {

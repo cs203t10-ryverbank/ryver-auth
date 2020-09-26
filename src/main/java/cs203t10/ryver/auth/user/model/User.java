@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -46,7 +47,7 @@ public class User implements UserDetails {
     @NotNull(message = "Authorities cannot be null")
     private String authString;
 
-    @JsonProperty("authorities_array")
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Stream.of(authString.split(","))
@@ -66,14 +67,17 @@ public class User implements UserDetails {
 
     private String address;
 
+    @JsonIgnore
     @Builder.Default
     @Setter(AccessLevel.NONE)
     private boolean accountNonExpired = true;
 
+    @JsonIgnore
     @Builder.Default
     @Setter(AccessLevel.NONE)
     private boolean accountNonLocked = true;
 
+    @JsonIgnore
     @Builder.Default
     @Setter(AccessLevel.NONE)
     private boolean credentialsNonExpired = true;
