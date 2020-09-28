@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import cs203t10.ryver.auth.security.SecurityUtils;
 import cs203t10.ryver.auth.user.model.User;
 import cs203t10.ryver.auth.user.model.UserInfo;
+import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByManager;
@@ -43,14 +44,11 @@ public class UserController {
     public UserInfo getCustomer(@PathVariable Long id) {
         User user = userService.findById(id);
         // Users without a manager role can only view a subset of customer data.
-        UserInfo userInfo;
-        if (SecurityUtils.isManagerAuthenticated()) {
-            userInfo = new UserInfoViewableByManager();
-        } else {
-            userInfo = new UserInfoViewableByCustomer();
-        }
-        BeanUtils.copyProperties(user, userInfo);
-        return userInfo;
+        UserInfo viewableInfo = SecurityUtils.isManagerAuthenticated()
+                ? new UserInfoViewableByManager()
+                : new UserInfoViewableByCustomer();
+        BeanUtils.copyProperties(user, viewableInfo);
+        return viewableInfo;
     }
 
     @PostMapping("/customers")
@@ -59,27 +57,29 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserInfo addCustomer(@Valid @RequestBody User user){
         User savedUser = userService.saveCustomer(user);
-        UserInfoViewableByManager userInfo = new UserInfoViewableByManager();
-        BeanUtils.copyProperties(savedUser, userInfo);
-        return userInfo;
+        UserInfoViewableByManager viewableInfo = new UserInfoViewableByManager();
+        BeanUtils.copyProperties(savedUser, viewableInfo);
+        return viewableInfo;
     }
 
     @PutMapping("/customers/{id}")
-    @RolesAllowed("MANAGER")
+    @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
             notes = "Only fields defined in the request body will be updated.")
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
-        // Users without a manager role can only view a subset of customer data.
-        User updatedUser = userService.updateUser(id, newUserInfo);
-        UserInfo infoToView;
-        if (SecurityUtils.isManagerAuthenticated()) {
-            infoToView = new UserInfoViewableByManager();
-        } else {
-            infoToView = new UserInfoViewableByCustomer();
-        }
-        BeanUtils.copyProperties(updatedUser, infoToView);
-        return infoToView;
+        boolean isManager = SecurityUtils.isManagerAuthenticated();
+        // Users without a manager role can only update a subset of customer data.
+        UserInfo updatableInfo = isManager
+                ? new UserInfoUpdatableByManager()
+                : new UserInfoUpdatableByCustomer();
+        BeanUtils.copyProperties(newUserInfo, updatableInfo);
+        User updatedUser = userService.updateUser(id, updatableInfo);
+        UserInfo viewableInfo = isManager
+                ? new UserInfoViewableByManager()
+                : new UserInfoViewableByCustomer();
+        BeanUtils.copyProperties(updatedUser, viewableInfo);
+        return viewableInfo;
     }
 
 }

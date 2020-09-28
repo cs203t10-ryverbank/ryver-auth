@@ -12,12 +12,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import cs203t10.ryver.auth.security.SecurityUtils;
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 import cs203t10.ryver.auth.user.model.User;
 import cs203t10.ryver.auth.user.model.UserInfo;
-import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
-import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
@@ -62,17 +59,13 @@ public class UserService {
         }
     }
 
-    public User updateUser(long id, UserInfoUpdatableByManager newUserInfo) {
-        UserInfo infoToUpdate;
-        if (SecurityUtils.isManagerAuthenticated()) {
-            infoToUpdate = new UserInfoUpdatableByManager();
-        } else {
-            infoToUpdate = new UserInfoUpdatableByCustomer();
-        }
-        BeanUtils.copyProperties(newUserInfo, infoToUpdate);
+    /**
+     * Update a user in the repository.
+     */
+    public User updateUser(long id, UserInfo newUserInfo) {
         return userRepo.findById(id).map(user -> {
             // Copy over non-null values only.
-            BeanUtils.copyProperties(infoToUpdate, user, getNullPropertyNames(infoToUpdate));
+            BeanUtils.copyProperties(newUserInfo, user, getNullPropertyNames(newUserInfo));
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
