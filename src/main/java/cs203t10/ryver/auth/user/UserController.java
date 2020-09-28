@@ -19,6 +19,7 @@ import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByManager;
+import cs203t10.ryver.auth.user.model.UserNewPassword;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
 import io.swagger.annotations.ApiOperation;
 
@@ -94,5 +95,12 @@ public class UserController {
         return viewableInfo;
     }
 
+    @PostMapping("/customers/{id}/update_password")
+    @PreAuthorize("principal == #id or hasRole('MANAGER')")
+    @ApiOperation(value = "Update a user's password",
+            notes = "Password will be hashed by the API.")
+    public User updateCustomerPassword(@PathVariable Long id, @Valid @RequestBody UserNewPassword newPassword) {
+        return userService.updateUserPassword(id, newPassword.getPassword());
+    }
 }
 

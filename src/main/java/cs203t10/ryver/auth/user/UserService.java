@@ -54,7 +54,9 @@ public class UserService {
      */
     public User saveAndHashPassword(User user) {
         try {
-            return userRepo.save(user.toBuilder().password(encoder.encode(user.getPassword())).build());
+            return userRepo.save(user.toBuilder()
+                    .password(encoder.encode(user.getPassword()))
+                    .build());
         } catch (DataIntegrityViolationException e) {
             throw new UserAlreadyExistsException(user.getUsername());
         }
@@ -71,9 +73,12 @@ public class UserService {
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User setActiveOfUser(long id, boolean active) {
+    /**
+     * Update the password of a user and save to the repository with a hashed password.
+     */
+    public User updateUserPassword(long id, String newPassword) {
         return userRepo.findById(id).map(user -> {
-            user.setEnabled(active);
+            user.setPassword(encoder.encode(newPassword));
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
