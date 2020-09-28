@@ -70,9 +70,17 @@ public class UserController {
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's password",
             notes = "Password will be hashed by the API.")
-    public User updateCustomerPassword(@PathVariable Long id,
+    public UserInfo updateCustomerPassword(@PathVariable Long id,
             @Valid @RequestBody UserNewPassword newPassword) {
-        return userService.updateUserPassword(id, newPassword.getPassword());
+        User updatedUser = userService.updateUserPassword(id, newPassword.getPassword());
+
+        // Transfer entity properties to data transfer object.
+        UserInfo viewableInfo = SecurityUtils.isManagerAuthenticated()
+                ? new UserInfoViewableByManager()
+                : new UserInfoViewableByCustomer();
+        BeanUtils.copyProperties(updatedUser, viewableInfo);
+
+        return viewableInfo;
     }
 
     @PutMapping("/customers/{id}")
