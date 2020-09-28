@@ -1,20 +1,14 @@
 package cs203t10.ryver.auth.user;
 
-import java.beans.FeatureDescriptor;
 import java.util.List;
-import java.util.stream.Stream;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
-import cs203t10.ryver.auth.user.model.User;
-import cs203t10.ryver.auth.user.model.UserInfo;
+import cs203t10.ryver.auth.user.view.UserInfo;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;

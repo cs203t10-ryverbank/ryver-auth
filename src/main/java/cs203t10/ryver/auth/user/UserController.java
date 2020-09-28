@@ -13,13 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import cs203t10.ryver.auth.security.SecurityUtils;
-import cs203t10.ryver.auth.user.model.User;
-import cs203t10.ryver.auth.user.model.UserInfo;
-import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
-import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
-import cs203t10.ryver.auth.user.model.UserInfoViewableByCustomer;
-import cs203t10.ryver.auth.user.model.UserInfoViewableByManager;
-import cs203t10.ryver.auth.user.model.UserNewPassword;
+import cs203t10.ryver.auth.user.view.UserInfo;
+import cs203t10.ryver.auth.user.view.UserInfoUpdatableByCustomer;
+import cs203t10.ryver.auth.user.view.UserInfoUpdatableByManager;
+import cs203t10.ryver.auth.user.view.UserInfoViewableByCustomer;
+import cs203t10.ryver.auth.user.view.UserInfoViewableByManager;
+import cs203t10.ryver.auth.user.view.UserNewPassword;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
 import io.swagger.annotations.ApiOperation;
 

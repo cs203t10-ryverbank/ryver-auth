@@ -1,4 +1,4 @@
-package cs203t10.ryver.auth.user.model;
+package cs203t10.ryver.auth.user;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

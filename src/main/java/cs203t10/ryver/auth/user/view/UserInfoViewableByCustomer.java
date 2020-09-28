@@ -1,4 +1,4 @@
-package cs203t10.ryver.auth.user.model;
+package cs203t10.ryver.auth.user.view;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

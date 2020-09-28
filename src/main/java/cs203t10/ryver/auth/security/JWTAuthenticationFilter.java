@@ -20,7 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import cs203t10.ryver.auth.user.model.User;
+import cs203t10.ryver.auth.user.User;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static cs203t10.ryver.auth.security.SecurityConstants.AUTHORITIES_KEY;

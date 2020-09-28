@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import cs203t10.ryver.auth.user.model.User;
+import cs203t10.ryver.auth.user.User;
 import cs203t10.ryver.auth.user.UserService;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
