@@ -33,7 +33,8 @@ public class UserController {
 
     @GetMapping("/customers")
     @RolesAllowed("MANAGER")
-    @ApiOperation(value = "Get all user data")
+    @ApiOperation(value = "Get all user data",
+            response = UserInfoViewableByManager[].class)
     public List<? extends UserInfo> getCustomers() {
         return userService.findAll().stream().map(user -> {
             UserInfoViewableByManager userInfo = new UserInfoViewableByManager();
@@ -44,7 +45,8 @@ public class UserController {
 
     @GetMapping("/customers/{id}")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Get a user's data")
+    @ApiOperation(value = "Get a user's data",
+            response = UserInfoViewableByManager.class)
     public UserInfo getCustomer(@PathVariable Long id) {
         User user = userService.findById(id);
         // Users without a manager role can only view a subset of customer data.
@@ -57,7 +59,8 @@ public class UserController {
 
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
-    @ApiOperation(value = "Add a customer")
+    @ApiOperation(value = "Add a customer",
+            response = UserInfoViewableByManager.class)
     @ResponseStatus(HttpStatus.CREATED)
     public UserInfo addCustomer(@Valid @RequestBody User user){
         User savedUser = userService.saveCustomer(user);
@@ -69,7 +72,8 @@ public class UserController {
     @PostMapping("/customers/{id}/update_password")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's password",
-            notes = "Password will be hashed by the API.")
+            notes = "Password will be hashed by the API.",
+            response = UserInfoViewableByManager.class)
     public UserInfo updateCustomerPassword(@PathVariable Long id,
             @Valid @RequestBody UserNewPassword newPassword) {
         User updatedUser = userService.updateUserPassword(id, newPassword.getPassword());
@@ -86,7 +90,8 @@ public class UserController {
     @PutMapping("/customers/{id}")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
-            notes = "Only fields defined in the request body will be updated.")
+            notes = "Only fields defined in the request body will be updated.",
+            response = UserInfoViewableByManager.class)
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
 
