@@ -52,7 +52,7 @@ public class SwaggerConfig {
         return Arrays.asList(
                 SecurityContext.builder()
                     .securityReferences(securityReferences())
-                    .forPaths(PathSelectors.any())
+                    .forPaths(PathSelectors.regex("/.+"))
                     .build());
     }
 
