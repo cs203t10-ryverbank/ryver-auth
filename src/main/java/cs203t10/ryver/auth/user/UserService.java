@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
 import cs203t10.ryver.auth.user.model.User;
 import cs203t10.ryver.auth.user.model.UserInfo;
+import cs203t10.ryver.auth.util.CustomBeanUtils;
 
 import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
@@ -65,18 +66,9 @@ public class UserService {
     public User updateUser(long id, UserInfo newUserInfo) {
         return userRepo.findById(id).map(user -> {
             // Copy over non-null values only.
-            BeanUtils.copyProperties(newUserInfo, user, getNullPropertyNames(newUserInfo));
+            CustomBeanUtils.copyNonNullProperties(newUserInfo, user);
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
-        return Stream.of(wrappedSource.getPropertyDescriptors())
-                .map(FeatureDescriptor::getName)
-                .filter(propertyName ->
-                        wrappedSource.getPropertyValue(propertyName) == null)
-                .toArray(String[]::new);
     }
 
     public User setActiveOfUser(long id, boolean active) {

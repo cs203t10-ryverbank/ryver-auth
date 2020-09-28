@@ -46,14 +46,20 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyX
 ### Update a user
 PUT http://localhost:8081/customers/16
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+# User token
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTYsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDIwMDAxMDJ9.qs3Zmm3yAosjF0FrEC94K0zXuK7zHMObGTk3VQOunAJHUNWly8ldcuIfLDC7sMcvSMS4b3xVvivxA_qQkzHEPw
+# Manager token
+# Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
 
 {
-    "nric":"S8291265Z"
+    "nric":"S8291265Z",
+    "phone":"98199189"
 }
 
 ### Get user info
 GET http://localhost:8081/customers/16
 Content-Type: application/json
+# User token
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTYsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDIwMDAxMDJ9.qs3Zmm3yAosjF0FrEC94K0zXuK7zHMObGTk3VQOunAJHUNWly8ldcuIfLDC7sMcvSMS4b3xVvivxA_qQkzHEPw
+# Manager token
 # Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
