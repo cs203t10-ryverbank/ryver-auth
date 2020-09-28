@@ -66,6 +66,15 @@ public class UserController {
         return viewableInfo;
     }
 
+    @PostMapping("/customers/{id}/update_password")
+    @PreAuthorize("principal == #id or hasRole('MANAGER')")
+    @ApiOperation(value = "Update a user's password",
+            notes = "Password will be hashed by the API.")
+    public User updateCustomerPassword(@PathVariable Long id,
+            @Valid @RequestBody UserNewPassword newPassword) {
+        return userService.updateUserPassword(id, newPassword.getPassword());
+    }
+
     @PutMapping("/customers/{id}")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
@@ -95,12 +104,5 @@ public class UserController {
         return viewableInfo;
     }
 
-    @PostMapping("/customers/{id}/update_password")
-    @PreAuthorize("principal == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Update a user's password",
-            notes = "Password will be hashed by the API.")
-    public User updateCustomerPassword(@PathVariable Long id, @Valid @RequestBody UserNewPassword newPassword) {
-        return userService.updateUserPassword(id, newPassword.getPassword());
-    }
 }
 
