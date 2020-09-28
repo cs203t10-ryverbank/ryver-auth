@@ -31,6 +31,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/customers")
     @RolesAllowed("MANAGER")
     @ApiOperation(value = "Get all user data",
@@ -42,6 +43,7 @@ public class UserController {
             return userInfo;
         }).collect(Collectors.toList());
     }
+
 
     @GetMapping("/customers/{id}")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
@@ -57,6 +59,7 @@ public class UserController {
         return viewableInfo;
     }
 
+
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
     @ApiOperation(value = "Add a customer",
@@ -68,6 +71,7 @@ public class UserController {
         BeanUtils.copyProperties(savedUser, viewableInfo);
         return viewableInfo;
     }
+
 
     @PostMapping("/customers/{id}/update_password")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
@@ -86,6 +90,7 @@ public class UserController {
 
         return viewableInfo;
     }
+
 
     @PutMapping("/customers/{id}")
     @PreAuthorize("principal == #id or hasRole('MANAGER')")
