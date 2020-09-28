@@ -1,6 +1,8 @@
 package cs203t10.ryver.auth.util;
 
 import java.beans.FeatureDescriptor;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.BeanUtils;
@@ -21,6 +23,20 @@ public class CustomBeanUtils extends BeanUtils {
                 .filter(propertyName ->
                         wrappedSource.getPropertyValue(propertyName) == null)
                 .toArray(String[]::new);
+    }
+
+    public static boolean nonNullIsSubsetOf(Object source, Object target) throws BeansException {
+        final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
+        final BeanWrapper wrappedTarget = new BeanWrapperImpl(target);
+        Set<String> sourceNonNullProperties = Stream.of(wrappedSource.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .filter(propertyName ->
+                        wrappedSource.getPropertyValue(propertyName) != null)
+                .collect(Collectors.toSet());
+        Set<String> targetProperties = Stream.of(wrappedTarget.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .collect(Collectors.toSet());
+        return targetProperties.containsAll(sourceNonNullProperties);
     }
 
 }

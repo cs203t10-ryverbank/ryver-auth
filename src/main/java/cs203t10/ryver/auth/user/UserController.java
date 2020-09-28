@@ -19,7 +19,10 @@ import cs203t10.ryver.auth.user.model.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.model.UserInfoViewableByManager;
+import cs203t10.ryver.auth.util.CustomBeanUtils;
 import io.swagger.annotations.ApiOperation;
+
+import static cs203t10.ryver.auth.user.UserException.UserUpdateForbiddenException;
 
 @RestController
 public class UserController {
@@ -68,17 +71,26 @@ public class UserController {
             notes = "Only fields defined in the request body will be updated.")
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
+
         boolean isManager = SecurityUtils.isManagerAuthenticated();
         // Users without a manager role can only update a subset of customer data.
         UserInfo updatableInfo = isManager
                 ? new UserInfoUpdatableByManager()
                 : new UserInfoUpdatableByCustomer();
-        BeanUtils.copyProperties(newUserInfo, updatableInfo);
+
+        // Check if the properties updated are permitted.
+        if (!CustomBeanUtils.nonNullIsSubsetOf(newUserInfo, updatableInfo)) {
+            throw new UserUpdateForbiddenException();
+        }
+
         User updatedUser = userService.updateUser(id, updatableInfo);
+
+        // Transfer entity properties to data transfer object.
         UserInfo viewableInfo = isManager
                 ? new UserInfoViewableByManager()
                 : new UserInfoViewableByCustomer();
         BeanUtils.copyProperties(updatedUser, viewableInfo);
+
         return viewableInfo;
     }
 

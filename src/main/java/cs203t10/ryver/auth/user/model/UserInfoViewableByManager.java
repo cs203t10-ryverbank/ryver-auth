@@ -25,7 +25,7 @@ public class UserInfoViewableByManager implements UserInfo {
     private String address;
 
     @JsonProperty("active")
-    private boolean enabled;
+    private Boolean enabled;
 
 }
 

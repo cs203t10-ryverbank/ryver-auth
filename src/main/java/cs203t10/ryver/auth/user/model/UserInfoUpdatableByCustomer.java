@@ -7,8 +7,6 @@ import lombok.*;
 @Data
 public class UserInfoUpdatableByCustomer implements UserInfo {
 
-    private String password;
-
     @JsonProperty("phone")
     private String phoneNumber;
 

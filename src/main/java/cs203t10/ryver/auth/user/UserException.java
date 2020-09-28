@@ -14,7 +14,7 @@ public class UserException {
         }
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "User not found.")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "User not found")
     public static class UserNotFoundException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,11 @@ public class UserException {
         public UserNotFoundException(String username) {
             super(String.format("User with username: %s not found", username));
         }
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Property update forbidden")
+    public static class UserUpdateForbiddenException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
     }
 
 }
