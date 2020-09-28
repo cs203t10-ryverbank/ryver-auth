@@ -1,65 +1,68 @@
-###
+### Check root route
 GET http://localhost:8081/
 
-###
+### Log into manager account
 POST http://localhost:8081/login
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
-###
+### Log into new customer account
 POST http://localhost:8081/login
 Accept: application/json
-Authorization: Basic bryan password
+Authorization: Basic mark password
 
-###
+### Get all users without credentials
+# 401
 GET http://localhost:8081/customers
 Accept: application/json
 
 ### Get users as manager
 GET http://localhost:8081/customers
 Accept: application/json
-# Token generated with manager account.
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+# Token generated with manager account
+Authorization: Bearer ...
 
 ### Get users as analyst
+# 403
 GET http://localhost:8081/customers
 Accept: application/json
-# Token generated with analyst account.
+# Token generated with analyst account
 Authorization: Bearer ...
 
 ### Create new user
 POST http://localhost:8081/customers
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+Authorization: Bearer ...
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"bryan",
+    "username":"mark",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
 }
 
 ### Update a user
-PUT http://localhost:8081/customers/16
+# If using manager access, most fields should be updatable
+# If using customer access, limited fields should be updatable
+PUT http://localhost:8081/customers/4
 Content-Type: application/json
-# User token
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTYsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDIwMDAxMDJ9.qs3Zmm3yAosjF0FrEC94K0zXuK7zHMObGTk3VQOunAJHUNWly8ldcuIfLDC7sMcvSMS4b3xVvivxA_qQkzHEPw
-# Manager token
-# Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+Authorization: Bearer ...
 
 {
     "nric":"S8291265Z",
     "phone":"98199189"
 }
 
-### Get user info
-GET http://localhost:8081/customers/16
+### Change a user password
+POST http://localhost:8081/customers/4/update_password
 Content-Type: application/json
-# User token
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnlhbiIsInVpZCI6MTYsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2MDIwMDAxMDJ9.qs3Zmm3yAosjF0FrEC94K0zXuK7zHMObGTk3VQOunAJHUNWly8ldcuIfLDC7sMcvSMS4b3xVvivxA_qQkzHEPw
-# Manager token
-# Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyXzEiLCJ1aWQiOjEsImF1dGgiOiJST0xFX01BTkFHRVIiLCJleHAiOjE2MDE5OTgzNDZ9.IoJywDJUqXx7dLoe1IxeuGWz-RQyG1TG_D_Sx1nPqO6xWxB8lwrr1vDO9JpbSI-HHTz6Sx3UdqD7ZqsyKZBkYw
+Authorization: Bearer ...
+
+{
+    "password":"newpassword"
+}
+
