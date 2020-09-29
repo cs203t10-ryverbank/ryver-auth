@@ -9,6 +9,7 @@ public class UserInfoUpdatableByManager implements UserInfo {
 
     private String username;
 
+    @JsonProperty("authorities")
     private String authString;
 
     @JsonProperty("full_name")
@@ -25,3 +26,4 @@ public class UserInfoUpdatableByManager implements UserInfo {
     private Boolean enabled;
 
 }
+

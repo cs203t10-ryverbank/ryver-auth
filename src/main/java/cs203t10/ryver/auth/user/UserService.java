@@ -2,6 +2,7 @@ package cs203t10.ryver.auth.user;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,12 +58,25 @@ public class UserService {
     }
 
     /**
-     * Update a user in the repository.
+     * Update the details of a user in the repository and replace all information.
      */
     public User updateUser(long id, UserInfo newUserInfo) {
+        return updateUser(id, newUserInfo, false);
+    }
+
+    /**
+     * Update the details of a user in the repository.
+     * @param shouldMerge If true, null properties of the new info object will
+     * represent leaving the current values in place. Otherwise, the user
+     * details are fully replaced.
+     */
+    public User updateUser(long id, UserInfo newUserInfo, boolean shouldMerge) {
         return userRepo.findById(id).map(user -> {
-            // Copy over non-null values only.
-            CustomBeanUtils.copyNonNullProperties(newUserInfo, user);
+            if (shouldMerge) {
+                CustomBeanUtils.copyNonNullProperties(newUserInfo, user);
+            } else {
+                BeanUtils.copyProperties(newUserInfo, user);
+            }
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }

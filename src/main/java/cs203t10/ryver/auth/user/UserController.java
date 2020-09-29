@@ -94,7 +94,7 @@ public class UserController {
     @PutMapping("/customers/{id}")
     @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
-            notes = "Only fields defined in the request body will be updated.",
+            notes = "All of the user's updatable details will be replaced by the request body.",
             response = UserInfoViewableByManager.class)
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
@@ -110,7 +110,39 @@ public class UserController {
             throw new UserUpdateForbiddenException();
         }
 
-        User updatedUser = userService.updateUser(id, updatableInfo);
+        User updatedUser = userService.updateUser(id, newUserInfo);
+
+        // Transfer entity properties to data transfer object.
+        UserInfo viewableInfo = isManager
+                ? new UserInfoViewableByManager()
+                : new UserInfoViewableByCustomer();
+        BeanUtils.copyProperties(updatedUser, viewableInfo);
+
+        return viewableInfo;
+    }
+
+
+    @PatchMapping("/customers/{id}")
+    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @ApiOperation(value = "Patch a user's details",
+            notes = "Only fields defined in the request body will be updated."
+            + "Null fields signify that the property should be left as-is.",
+            response = UserInfoViewableByManager.class)
+    public UserInfo patchCustomer(@PathVariable Long id,
+            @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
+
+        boolean isManager = SecurityUtils.isManagerAuthenticated();
+        // Users without a manager role can only update a subset of customer data.
+        UserInfo updatableInfo = isManager
+                ? new UserInfoUpdatableByManager()
+                : new UserInfoUpdatableByCustomer();
+
+        // Check if the properties updated are permitted.
+        if (!CustomBeanUtils.nonNullIsSubsetOf(newUserInfo, updatableInfo)) {
+            throw new UserUpdateForbiddenException();
+        }
+
+        User updatedUser = userService.updateUser(id, newUserInfo, true);
 
         // Transfer entity properties to data transfer object.
         UserInfo viewableInfo = isManager
