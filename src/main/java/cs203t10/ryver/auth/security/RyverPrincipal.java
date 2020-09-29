@@ -2,12 +2,12 @@ package cs203t10.ryver.auth.security;
 
 import lombok.*;
 
-@Data @AllArgsConstructor
+@AllArgsConstructor
 public class RyverPrincipal {
 
-    private Long uid;
+    public Long uid;
 
-    private String username;
+    public String username;
 
 }
 
