@@ -125,7 +125,7 @@ public class UserController {
     @PatchMapping("/customers/{id}")
     @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Patch a user's details",
-            notes = "Only fields defined in the request body will be updated."
+            notes = "Only fields defined in the request body will be updated. "
             + "Null fields signify that the property should be left as-is.",
             response = UserInfoViewableByManager.class)
     public UserInfo patchCustomer(@PathVariable Long id,
