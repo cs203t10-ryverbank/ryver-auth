@@ -14,7 +14,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,7 +44,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        UsernamePasswordAuthenticationToken auth = getAuthentication(request);
+        RyverAuthenticationToken auth = getAuthentication(request);
 
         // If the JWT is valid, set the security context.
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -57,7 +56,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
      * Verify the JWT of a request.
      * @return An authentication token if the JWT is valid, or null if it is not.
      */
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+    private RyverAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(AUTH_HEADER_KEY);
         if (token == null) {
             return null;
@@ -66,9 +65,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 .build()
                 .verify(token.replace(BEARER_PREFIX, ""));
 
-        // Extract the username (subject) from the JWT.
+        // Extract the username (subject) and uid from the JWT.
         final Long uid = jwt.getClaim(UID_KEY).asLong();
-        if (uid == null) {
+        final String username = jwt.getSubject();
+        if (username == null || uid == null) {
             return null;
         }
 
@@ -78,8 +78,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
+        System.out.printf("username: %s, uid: %s, auth: %s\n\n\n", username, uid, jwt.getClaim(AUTHORITIES_KEY).asString());
+
         // Set the UID as the principal of the auth token.
-        return new UsernamePasswordAuthenticationToken(uid, null, authorities);
+        return new RyverAuthenticationToken(uid, username, authorities);
     }
 
 }
