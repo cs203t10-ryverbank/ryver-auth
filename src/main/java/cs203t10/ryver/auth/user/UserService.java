@@ -37,7 +37,7 @@ public class UserService {
      * @return The user as a customer.
      */
     public User saveCustomer(User user) {
-        return saveUser(user.toBuilder()
+        return saveNewUser(user.toBuilder()
                 .authString("ROLE_USER")
                 .build());
     }
@@ -45,8 +45,14 @@ public class UserService {
     /**
      * Save a new user to the repository.
      */
-    public User saveUser(User user) {
+    public User saveNewUser(User user) {
         try {
+            // If a new password is set, encode it.
+            String newPassword = user.getPassword();
+            if (newPassword != null) {
+                System.out.println(newPassword);
+                user.setPassword(encoder.encode(newPassword));
+            }
             return userRepo.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UserAlreadyExistsException(user.getUsername());
@@ -74,7 +80,8 @@ public class UserService {
                 BeanUtils.copyProperties(newUserInfo, user);
             }
             // If a new password is set, encode it.
-            String newPassword = CustomBeanUtils.getPropertyValueWithName(newUserInfo, "password", String.class);
+            String newPassword = CustomBeanUtils.getPropertyValueWithName(
+                    newUserInfo, "password", String.class);
             if (newPassword != null) {
                 System.out.println(newPassword);
                 user.setPassword(encoder.encode(newPassword));
