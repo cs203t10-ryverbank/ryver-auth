@@ -39,5 +39,16 @@ public class CustomBeanUtils extends BeanUtils {
         return targetProperties.containsAll(sourceNonNullProperties);
     }
 
+    public static <T> T getPropertyValueWithName(Object source, String propertyName, Class<T> type) throws BeansException {
+        final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
+        try {
+            @SuppressWarnings("unchecked")
+            T value = (T) wrappedSource.getPropertyValue(propertyName);
+            return value;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
 

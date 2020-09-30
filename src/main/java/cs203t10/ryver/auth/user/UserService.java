@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
@@ -15,6 +16,9 @@ import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private UserRepository userRepo;
@@ -68,6 +72,12 @@ public class UserService {
                 CustomBeanUtils.copyNonNullProperties(newUserInfo, user);
             } else {
                 BeanUtils.copyProperties(newUserInfo, user);
+            }
+            // If a new password is set, encode it.
+            String newPassword = CustomBeanUtils.getPropertyValueWithName(newUserInfo, "password", String.class);
+            if (newPassword != null) {
+                System.out.println(newPassword);
+                user.setPassword(encoder.encode(newPassword));
             }
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
