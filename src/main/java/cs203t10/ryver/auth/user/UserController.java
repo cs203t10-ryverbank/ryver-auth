@@ -45,7 +45,7 @@ public class UserController {
 
 
     @GetMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Get a user's data",
             response = UserInfoViewableByManager.class)
     public UserInfo getCustomer(@PathVariable Long id) {
@@ -73,7 +73,7 @@ public class UserController {
 
 
     @PostMapping("/customers/{id}/update_password")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's password",
             notes = "Password will be hashed by the API.",
             response = UserInfoViewableByManager.class)
@@ -92,7 +92,7 @@ public class UserController {
 
 
     @PutMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
             notes = "All of the user's updatable details will be replaced by the request body.",
             response = UserInfoViewableByManager.class)
@@ -123,7 +123,7 @@ public class UserController {
 
 
     @PatchMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Patch a user's details",
             notes = "Only fields defined in the request body will be updated. "
             + "Null fields signify that the property should be left as-is.",
