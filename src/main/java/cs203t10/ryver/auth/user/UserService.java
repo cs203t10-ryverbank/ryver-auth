@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs203t10.ryver.auth.user.UserException.UserNotFoundException;
@@ -16,9 +15,6 @@ import static cs203t10.ryver.auth.user.UserException.UserAlreadyExistsException;
 
 @Service
 public class UserService {
-
-    @Autowired
-    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private UserRepository userRepo;
@@ -37,21 +33,17 @@ public class UserService {
      * @return The user as a customer.
      */
     public User saveCustomer(User user) {
-        return saveAndHashPassword(user.toBuilder()
+        return saveUser(user.toBuilder()
                 .authString("ROLE_USER")
                 .build());
     }
 
     /**
-     * Save the user to the repository with a hashed password.
-     * The original user object is not mutated.
-     * @return The user with a hashed password.
+     * Save a new user to the repository.
      */
-    public User saveAndHashPassword(User user) {
+    public User saveUser(User user) {
         try {
-            return userRepo.save(user.toBuilder()
-                    .password(encoder.encode(user.getPassword()))
-                    .build());
+            return userRepo.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UserAlreadyExistsException(user.getUsername());
         }
@@ -77,16 +69,6 @@ public class UserService {
             } else {
                 BeanUtils.copyProperties(newUserInfo, user);
             }
-            return userRepo.save(user);
-        }).orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    /**
-     * Update the password of a user and save to the repository with a hashed password.
-     */
-    public User updateUserPassword(long id, String newPassword) {
-        return userRepo.findById(id).map(user -> {
-            user.setPassword(encoder.encode(newPassword));
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }

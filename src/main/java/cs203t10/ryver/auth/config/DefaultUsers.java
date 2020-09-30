@@ -26,7 +26,7 @@ public class DefaultUsers implements CommandLineRunner {
 
     public void addDefaultUser(User user) {
         try {
-            System.out.println("[Add user]: " + userService.saveAndHashPassword(user).getUsername());
+            System.out.println("[Add user]: " + userService.saveUser(user).getUsername());
         } catch (UserAlreadyExistsException e) {
             System.out.println("[Already exists]: " + user.getUsername());
         }

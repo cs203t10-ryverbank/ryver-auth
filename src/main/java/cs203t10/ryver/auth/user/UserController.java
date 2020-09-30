@@ -18,7 +18,6 @@ import cs203t10.ryver.auth.user.view.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByManager;
-import cs203t10.ryver.auth.user.view.UserNewPassword;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
 import io.swagger.annotations.ApiOperation;
 
@@ -68,25 +67,6 @@ public class UserController {
         User savedUser = userService.saveCustomer(user);
         UserInfoViewableByManager viewableInfo = new UserInfoViewableByManager();
         BeanUtils.copyProperties(savedUser, viewableInfo);
-        return viewableInfo;
-    }
-
-
-    @PostMapping("/customers/{id}/update_password")
-    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Update a user's password",
-            notes = "Password will be hashed by the API.",
-            response = UserInfoViewableByManager.class)
-    public UserInfo updateCustomerPassword(@PathVariable Long id,
-            @Valid @RequestBody UserNewPassword newPassword) {
-        User updatedUser = userService.updateUserPassword(id, newPassword.getPassword());
-
-        // Transfer entity properties to data transfer object.
-        UserInfo viewableInfo = SecurityUtils.isManagerAuthenticated()
-                ? new UserInfoViewableByManager()
-                : new UserInfoViewableByCustomer();
-        BeanUtils.copyProperties(updatedUser, viewableInfo);
-
         return viewableInfo;
     }
 
