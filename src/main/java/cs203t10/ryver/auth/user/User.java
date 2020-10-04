@@ -61,8 +61,16 @@ public class User implements UserDetails {
     private String nric;
 
     @JsonProperty("phone")
-    @Pattern(regexp = "^(\\+65)?[689]\\d{7}$")
+    @Pattern(regexp = "^(\\+65)?\\s*([689]\\d{3})\\s*(\\d{4})$")
     private String phoneNumber;
+
+    public void setPhoneNumber(String phoneNumber) {
+        String regexp = "^(\\+65)?\\s*([689]\\d{3})\\s*(\\d{4})$";
+        java.util.regex.Pattern r = java.util.regex.Pattern.compile(regexp);
+        java.util.regex.Matcher matcher = r.matcher(phoneNumber);
+        matcher.find();
+        this.phoneNumber = "+65" + matcher.group(2) + matcher.group(3);
+    }
 
     private String address;
 

@@ -18,7 +18,6 @@ import cs203t10.ryver.auth.user.view.UserInfoUpdatableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByManager;
-import cs203t10.ryver.auth.user.view.UserNewPassword;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
 import io.swagger.annotations.ApiOperation;
 
@@ -45,7 +44,7 @@ public class UserController {
 
 
     @GetMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Get a user's data",
             response = UserInfoViewableByManager.class)
     public UserInfo getCustomer(@PathVariable Long id) {
@@ -72,27 +71,8 @@ public class UserController {
     }
 
 
-    @PostMapping("/customers/{id}/update_password")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Update a user's password",
-            notes = "Password will be hashed by the API.",
-            response = UserInfoViewableByManager.class)
-    public UserInfo updateCustomerPassword(@PathVariable Long id,
-            @Valid @RequestBody UserNewPassword newPassword) {
-        User updatedUser = userService.updateUserPassword(id, newPassword.getPassword());
-
-        // Transfer entity properties to data transfer object.
-        UserInfo viewableInfo = SecurityUtils.isManagerAuthenticated()
-                ? new UserInfoViewableByManager()
-                : new UserInfoViewableByCustomer();
-        BeanUtils.copyProperties(updatedUser, viewableInfo);
-
-        return viewableInfo;
-    }
-
-
     @PutMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Update a user's details",
             notes = "All of the user's updatable details will be replaced by the request body.",
             response = UserInfoViewableByManager.class)
@@ -123,7 +103,7 @@ public class UserController {
 
 
     @PatchMapping("/customers/{id}")
-    @PreAuthorize("principal.id == #id or hasRole('MANAGER')")
+    @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
     @ApiOperation(value = "Patch a user's details",
             notes = "Only fields defined in the request body will be updated. "
             + "Null fields signify that the property should be left as-is.",

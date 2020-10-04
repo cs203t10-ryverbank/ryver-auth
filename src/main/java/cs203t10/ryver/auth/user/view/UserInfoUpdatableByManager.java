@@ -9,6 +9,8 @@ public class UserInfoUpdatableByManager implements UserInfo {
 
     private String username;
 
+    private String password;
+
     @JsonProperty("authorities")
     private String authString;
 

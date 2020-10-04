@@ -37,21 +37,23 @@ public class UserService {
      * @return The user as a customer.
      */
     public User saveCustomer(User user) {
-        return saveAndHashPassword(user.toBuilder()
+        return saveNewUser(user.toBuilder()
                 .authString("ROLE_USER")
                 .build());
     }
 
     /**
-     * Save the user to the repository with a hashed password.
-     * The original user object is not mutated.
-     * @return The user with a hashed password.
+     * Save a new user to the repository.
      */
-    public User saveAndHashPassword(User user) {
+    public User saveNewUser(User user) {
         try {
-            return userRepo.save(user.toBuilder()
-                    .password(encoder.encode(user.getPassword()))
-                    .build());
+            // If a new password is set, encode it.
+            String newPassword = user.getPassword();
+            if (newPassword != null) {
+                System.out.println(newPassword);
+                user.setPassword(encoder.encode(newPassword));
+            }
+            return userRepo.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UserAlreadyExistsException(user.getUsername());
         }
@@ -77,16 +79,13 @@ public class UserService {
             } else {
                 BeanUtils.copyProperties(newUserInfo, user);
             }
-            return userRepo.save(user);
-        }).orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    /**
-     * Update the password of a user and save to the repository with a hashed password.
-     */
-    public User updateUserPassword(long id, String newPassword) {
-        return userRepo.findById(id).map(user -> {
-            user.setPassword(encoder.encode(newPassword));
+            // If a new password is set, encode it.
+            String newPassword = CustomBeanUtils.getPropertyValueWithName(
+                    newUserInfo, "password", String.class);
+            if (newPassword != null) {
+                System.out.println(newPassword);
+                user.setPassword(encoder.encode(newPassword));
+            }
             return userRepo.save(user);
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
