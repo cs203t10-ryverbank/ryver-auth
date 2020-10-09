@@ -14,7 +14,6 @@ public class UserInfoUpdatableByManager implements UserInfo {
     @JsonProperty("authorities")
     private String authString;
 
-    @JsonProperty("full_name")
     private String fullName;
 
     private String nric;

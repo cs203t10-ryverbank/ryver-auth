@@ -54,7 +54,6 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @JsonProperty("full_name")
     private String fullName;
 
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")

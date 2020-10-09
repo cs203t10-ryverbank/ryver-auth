@@ -11,7 +11,6 @@ public class UserInfoViewableByCustomer implements UserInfo {
 
     private String username;
 
-    @JsonProperty("full_name")
     private String fullName;
 
     private String nric;
