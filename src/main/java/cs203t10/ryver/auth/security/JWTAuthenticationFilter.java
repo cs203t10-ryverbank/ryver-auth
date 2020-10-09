@@ -75,6 +75,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
 
+        // All other routes will use Bearer authentication, in which case the
+        // principal will be of RyverPrincipal type.
+        //
+        // This only applies to /login route which accepts Basic auth and
+        // gets User details from CustomUserDetailsService.
         User user = (User) authResult.getPrincipal();
 
         // Serialize all granted authorities into a comma-separated string.
