@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class UserException {
 
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Username already exists")
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     public static class UserAlreadyExistsException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
@@ -14,7 +14,7 @@ public class UserException {
         }
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "User not found")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public static class UserNotFoundException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class UserException {
         }
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Property update forbidden")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public static class UserUpdateForbiddenException extends RuntimeException {
         private static final long serialVersionUID = 1L;
     }
