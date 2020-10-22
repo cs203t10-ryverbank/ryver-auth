@@ -86,11 +86,9 @@ public class UserController {
                 : new UserInfoUpdatableByCustomer();
 
         // Check if the properties updated are permitted.
-        if (!CustomBeanUtils.nonNullIsSubsetOf(newUserInfo, updatableInfo)) {
-            throw new UserUpdateForbiddenException();
-        }
-
-        User updatedUser = userService.updateUser(id, newUserInfo);
+        
+        CustomBeanUtils.copyNonNullProperties( newUserInfo, updatableInfo);
+        User updatedUser = userService.updateUser(id, updatableInfo, true);
 
         // Transfer entity properties to data transfer object.
         UserInfo viewableInfo = isManager

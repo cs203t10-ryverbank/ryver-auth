@@ -68,7 +68,7 @@ public class User implements UserDetails {
         java.util.regex.Pattern r = java.util.regex.Pattern.compile(regexp);
         java.util.regex.Matcher matcher = r.matcher(phoneNumber);
         matcher.find();
-        this.phoneNumber = "+65" + matcher.group(2) + matcher.group(3);
+        this.phoneNumber = matcher.group(2) + matcher.group(3);
     }
 
     private String address;
