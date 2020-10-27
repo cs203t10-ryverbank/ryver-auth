@@ -86,7 +86,7 @@ public class UserController {
                 : new UserInfoUpdatableByCustomer();
 
         // Check if the properties updated are permitted.
-        
+
         CustomBeanUtils.copyNonNullProperties( newUserInfo, updatableInfo);
         User updatedUser = userService.updateUser(id, updatableInfo, true);
 
@@ -129,6 +129,13 @@ public class UserController {
         BeanUtils.copyProperties(updatedUser, viewableInfo);
 
         return viewableInfo;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/customers/reset")
+    @RolesAllowed("MANAGER")
+    public void resetCustomers() {
+        userService.resetCustomers();
     }
 
 }

@@ -90,5 +90,12 @@ public class UserService {
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public void resetCustomers(){
+        userRepo.deleteAll();
+        saveNewUser(User.builder().username("manager_1").password("01_manager_01").authString("ROLE_MANAGER").build());
+        saveNewUser(User.builder().username("analyst_1").password("01_analyst_01").authString("ROLE_ANALYST").build());
+        saveNewUser(User.builder().username("analyst_2").password("02_analyst_02").authString("ROLE_ANALYST").build());
+    }
+
 }
 
