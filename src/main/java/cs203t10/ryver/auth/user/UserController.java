@@ -132,7 +132,7 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/customers/reset")
+    @PostMapping("/reset")
     @RolesAllowed("MANAGER")
     public void resetCustomers() {
         userService.resetCustomers();
