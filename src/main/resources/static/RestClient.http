@@ -7,9 +7,9 @@ Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
 ### Log into new customer account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
-Authorization: Basic mark password
+Authorization: Basic marktan password
 
 ### Get all users without credentials
 # 401
@@ -17,8 +17,8 @@ GET http://localhost:8081/customers
 Accept: application/json
 
 ### Get users as manager
-# GET http://localhost:8080/customers
-GET http://54.255.146.38/customers
+GET http://localhost:8080/customers
+# GET http://54.255.146.38/customers
 Accept: application/json
 # Token generated with manager account
 # Authorization: Bearer ...
