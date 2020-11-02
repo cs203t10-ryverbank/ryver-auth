@@ -2,7 +2,7 @@
 GET http://localhost:8081/
 
 ### Log into manager account
-POST http://localhost:8081/login
+POST http://localhost:8080/login
 Accept: application/json
 Authorization: Basic manager_1 01_manager_01
 
@@ -17,10 +17,12 @@ GET http://localhost:8081/customers
 Accept: application/json
 
 ### Get users as manager
-GET http://localhost:8081/customers
+# GET http://localhost:8080/customers
+GET http://54.255.146.38/customers
 Accept: application/json
 # Token generated with manager account
-Authorization: Bearer ...
+# Authorization: Bearer ...
+Authorization: Basic manager_1 01_manager_01
 
 ### Get users as analyst
 # 403
@@ -30,16 +32,17 @@ Accept: application/json
 Authorization: Bearer ...
 
 ### Create new user
-POST http://localhost:8081/customers
+POST http://localhost:8080/customers
 Content-Type: application/json
-Authorization: Bearer ...
+# Authorization: Bearer ...
+Authorization: Basic manager_1 01_manager_01
 
 {
     "full_name":"Mark Tan",
     "nric":"S8291266I",
     "phone":"91251234",
     "address":"27 Jalan Alamak S680234",
-    "username":"mark",
+    "username":"marktan",
     "password":"password",
     "authorities":"ROLE_USER",
     "active": true
