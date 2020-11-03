@@ -20,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import cs203t10.ryver.auth.user.constraint.NRICConstraint;
 import lombok.*;
 
 @Entity
@@ -56,6 +57,7 @@ public class User implements UserDetails {
 
     private String fullName;
 
+    @NRICConstraint
     @Pattern(regexp = "^[STFG]\\d{7}[A-JZ]$")
     private String nric;
 
