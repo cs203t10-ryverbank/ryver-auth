@@ -3,6 +3,8 @@ package cs203t10.ryver.auth.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableGlobalMethodSecurity(
     prePostEnabled = true, // Enables @PreAuthorize and @PostAuthorize
     securedEnabled = true, // Enables @Secured
@@ -43,9 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web
-            .ignoring()
-            .antMatchers("/h2-console/**");
+        web.ignoring()
+            .antMatchers("/h2-console/**")
+            .antMatchers("/login");
+            
     }
 
     /**
@@ -54,7 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests().anyRequest().authenticated()
+            .authorizeRequests()
+            .antMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+            .anyRequest().authenticated()
         .and()
             .httpBasic()
         .and()
