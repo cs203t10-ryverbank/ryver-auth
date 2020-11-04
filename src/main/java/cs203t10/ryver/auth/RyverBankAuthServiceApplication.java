@@ -6,7 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -18,7 +18,7 @@ public class RyverBankAuthServiceApplication {
 	}
 
     @GetMapping("/")
-    @ApiOperation(value = "Check the service name")
+    @Operation(summary = "Check the service name")
     public String getRoot() {
         return "ryver-auth service";
     }
