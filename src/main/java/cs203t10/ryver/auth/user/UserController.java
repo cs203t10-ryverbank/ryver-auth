@@ -19,7 +19,10 @@ import cs203t10.ryver.auth.user.view.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByManager;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import static cs203t10.ryver.auth.user.UserException.UserUpdateForbiddenException;
 
@@ -32,8 +35,10 @@ public class UserController {
 
     @GetMapping("/customers")
     @RolesAllowed("MANAGER")
-    @ApiOperation(value = "Get all user data",
-            response = UserInfoViewableByManager[].class)
+    @Operation(summary = "Get all user data")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = UserInfoViewableByManager[].class)))
     public List<? extends UserInfo> getCustomers() {
         return userService.findAll().stream().map(user -> {
             UserInfoViewableByManager userInfo = new UserInfoViewableByManager();
@@ -45,8 +50,10 @@ public class UserController {
 
     @GetMapping("/customers/{id}")
     @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Get a user's data",
-            response = UserInfoViewableByManager.class)
+    @Operation(summary = "Get a user's data")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = UserInfo.class)))
     public UserInfo getCustomer(@PathVariable Long id) {
         User user = userService.findById(id);
         // Users without a manager role can only view a subset of customer data.
@@ -60,8 +67,10 @@ public class UserController {
 
     @PostMapping("/customers")
     @RolesAllowed("MANAGER")
-    @ApiOperation(value = "Add a customer",
-            response = UserInfoViewableByManager.class)
+    @Operation(summary = "Add a customer")
+    @ApiResponse(responseCode = "201", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = UserInfo.class)))
     @ResponseStatus(HttpStatus.CREATED)
     public UserInfo addCustomer(@Valid @RequestBody User user){
         User savedUser = userService.saveCustomer(user);
@@ -73,9 +82,11 @@ public class UserController {
 
     @PutMapping("/customers/{id}")
     @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Update a user's details",
-            notes = "All of the user's updatable details will be replaced by the request body.",
-            response = UserInfoViewableByManager.class)
+    @Operation(summary = "Update a user's details",
+            description = "All of the user's updatable details will be replaced by the request body.")
+    @ApiResponse(responseCode = "200", 
+            content = @Content(mediaType = "application/json", 
+            schema = @Schema(implementation = UserInfo.class)))
     public UserInfo updateCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
 
@@ -102,10 +113,12 @@ public class UserController {
 
     @PatchMapping("/customers/{id}")
     @PreAuthorize("principal.uid == #id or hasRole('MANAGER')")
-    @ApiOperation(value = "Patch a user's details",
-            notes = "Only fields defined in the request body will be updated. "
-            + "Null fields signify that the property should be left as-is.",
-            response = UserInfoViewableByManager.class)
+    @Operation(summary = "Patch a user's details",
+            description = "Only fields defined in the request body will be updated. "
+            + "Null fields signify that the property should be left as-is.")
+    @ApiResponse(responseCode = "200", 
+                content = @Content(mediaType = "application/json", 
+                schema = @Schema(implementation = UserInfo.class)))
     public UserInfo patchCustomer(@PathVariable Long id,
             @Valid @RequestBody UserInfoUpdatableByManager newUserInfo) {
 
