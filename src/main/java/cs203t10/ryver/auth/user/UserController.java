@@ -19,6 +19,7 @@ import cs203t10.ryver.auth.user.view.UserInfoUpdatableByManager;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByCustomer;
 import cs203t10.ryver.auth.user.view.UserInfoViewableByManager;
 import cs203t10.ryver.auth.util.CustomBeanUtils;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -147,7 +148,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/reset")
     @RolesAllowed("MANAGER")
-    @Operation(summary = "Reset the service.")
+    @Hidden
     public void resetCustomers() {
         userService.resetCustomers();
     }
