@@ -17,19 +17,19 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void getUsersUnauthorized() throws Exception {
-        mockMvc.perform(get("/users")).andExpect(status().isUnauthorized());
+    public void getCustomersUnauthorized() throws Exception {
+        mockMvc.perform(get("/customers")).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = { "USER" })
-    public void getUsersForbidden() throws Exception {
-        mockMvc.perform(get("/users")).andExpect(status().isForbidden());
+    public void getCustomersForbidden() throws Exception {
+        mockMvc.perform(get("/customers")).andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(roles = { "MANAGER" })
-    public void getUsers() throws Exception {
-        mockMvc.perform(get("/users")).andExpect(status().isOk());
+    public void getCustomers() throws Exception {
+        mockMvc.perform(get("/customers")).andExpect(status().isOk());
     }
 }
